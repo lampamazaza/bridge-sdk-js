@@ -568,7 +568,7 @@ describe("Bridge.validateTransfer", () => {
       await expect(bridge.validateTransfer(params)).rejects.toThrow("Invalid Aptos sender address")
     })
 
-    it("throws when source chain is Aptos (bridge not yet deployed)", async () => {
+    it("returns the configured contract address for Aptos source", async () => {
       const params: TransferParams = {
         token: "aptos:0x000000000000000000000000000000000000000000000000000000000000000a" as OmniAddress,
         amount: 1000000000n,
@@ -579,14 +579,10 @@ describe("Bridge.validateTransfer", () => {
         recipient: "near:alice.testnet" as OmniAddress,
       }
 
-      await expect(bridge.validateTransfer(params)).rejects.toThrow(ValidationError)
-      await expect(bridge.validateTransfer(params)).rejects.toThrow(
-        "Aptos bridge is not yet deployed on this network",
-      )
-      await expect(bridge.validateTransfer(params)).rejects.toMatchObject({
-        code: "UNSUPPORTED_CHAIN",
-        details: { chain: "Aptos" },
-      })
+      const result = await bridge.validateTransfer(params)
+
+      expect(result.sourceChain).toBe(ChainKind.Aptos)
+      expect(result.contractAddress).toBe(bridge.addresses.aptos?.bridge)
     })
   })
 
