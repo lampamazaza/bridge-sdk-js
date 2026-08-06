@@ -1,5 +1,12 @@
 # @omni-bridge/evm
 
+## 0.17.0
+
+### Patch Changes
+
+- Updated dependencies [f7bfb49]
+  - @omni-bridge/core@0.17.0
+
 ## 0.16.0
 
 ### Patch Changes
